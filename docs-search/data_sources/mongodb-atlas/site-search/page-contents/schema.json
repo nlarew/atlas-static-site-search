@@ -1,0 +1,17 @@
+{
+    "properties": {
+        "_id": {
+            "bsonType": "string"
+        },
+        "doc_text": {
+            "bsonType": "string"
+        },
+        "last_updated": {
+            "bsonType": "date"
+        },
+        "title": {
+            "bsonType": "string"
+        }
+    },
+    "title": "page-content"
+}
