@@ -11,5 +11,17 @@
     {
         "name": "deleteOldDocuments",
         "private": true
+    },
+    {
+        "name": "searchPageContents",
+        "private": false,
+        "run_as_system": true,
+        "disable_arg_logs": true
+    },
+    {
+        "name": "triggerIndexGeneration",
+        "private": true,
+        "run_as_system": true,
+        "disable_arg_logs": true
     }
 ]

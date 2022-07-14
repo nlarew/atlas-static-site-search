@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Realm Docs Search</title>
+    <script src="https://unpkg.com/realm-web@1.3.0/dist/bundle.iife.js"></script>
+  </head>
+  <body>
+    <h1>Search the Realm Docs!</h1>
+    <form id="search">
+      <input type="text" name="query" id="query" placeholder="..." />
+      <button type="submit">search</button>
+    </form>
+    <div id="results-container">
+      <h2>Search results</h2>
+      <div id="results">
+        <p>none yet</p>
+      </div>
+    </div>
+  </body>
+  <script>
+    async function searchDocs(query) {
+      const APP_ID = "docs-search-cxodi";
+      const app = new Realm.App({ id: APP_ID });
+      const user = await app.logIn(Realm.Credentials.anonymous());
+      const res = await user.functions.searchPageContents(query);
+      return res;
+    }
+    function renderResults(searchResults) {
+      const results = document.getElementById("results");
+      results.innerHTML = "";
+
+      searchResults.forEach((result) => {
+        const resultContainer = document.createElement("div");
+        resultContainer.innerHTML += `<a href=${result._id}><h3>${result.title}</h3></a>`;
+        results.appendChild(resultContainer);
+      });
+    }
+    document.getElementById("search").addEventListener("submit", async (e) => {
+      e.preventDefault();
+      const query = document.getElementById("query");
+      const queryString = query.value;
+      const searchResults = await searchDocs(queryString);
+      console.log(searchResults);
+      renderResults(searchResults);
+    });
+  </script>
+</html>
