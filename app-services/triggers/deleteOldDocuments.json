@@ -1,4 +1,5 @@
 {
+    "id": "62a3539440c4f254a08187ce",
     "name": "deleteOldDocuments",
     "type": "SCHEDULED",
     "config": {
