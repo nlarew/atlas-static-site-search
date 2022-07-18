@@ -7,7 +7,7 @@ function getDocsFromHtml(htmlStr) {
   return plainText;
 }
 
-exports = async function ({ fullDocument }) {
+async function writePageContents({ fullDocument }) {
   const axios = require("axios");
 
   //for testing
@@ -47,4 +47,10 @@ exports = async function ({ fullDocument }) {
   };
   const options = { upsert: true };
   pageContents.updateOne(query, updateDoc, options);
-};
+}
+
+exports = writePageContents;
+
+if (typeof module !== "undefined") {
+  module.exports = { writePageContents, getDocsFromHtml };
+}
