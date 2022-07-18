@@ -30,6 +30,8 @@ of this repository. All changes should be made there, and then deployed using th
 To edit the Atlas Search index, you must do so within the Atlas project.
 If you would like to work on the Search index, request access from Ben Perlmutter (@mongodben).
 
+Frontend search client code exists within the `frontend` directory.
+
 ## Post-Prototype Roadmap
 
 This'll be built out once the prototype phase advances.

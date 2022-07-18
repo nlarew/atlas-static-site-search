@@ -31,10 +31,10 @@
     </div>
   </body>
   <script>
+    const APP_ID = "docs-search-cxodi";
+    const app = new Realm.App({ id: APP_ID });
+    const user = await app.logIn(Realm.Credentials.anonymous());
     async function searchDocs(query) {
-      const APP_ID = "docs-search-cxodi";
-      const app = new Realm.App({ id: APP_ID });
-      const user = await app.logIn(Realm.Credentials.anonymous());
       const res = await user.functions.searchPageContents(query);
       return res;
     }

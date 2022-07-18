@@ -15,7 +15,7 @@
         "project": {},
         "full_document": true,
         "full_document_before_change": false,
-        "unordered": false,
+        "unordered": true,
         "skip_catchup_events": false
     },
     "disabled": false,
