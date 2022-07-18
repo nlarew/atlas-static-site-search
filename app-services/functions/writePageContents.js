@@ -1,4 +1,5 @@
 async function getDocsFromHtml(html){
+  const axios = require("axios");
   const html2textUrl = context.values.get("html2textUrl");
   const response = await axios.post(html2textUrl, { html });
   return response.data.text
