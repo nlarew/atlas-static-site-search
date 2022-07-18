@@ -1,0 +1,16 @@
+org: nlarew
+app: skunkworks-atlas-docs-search
+service: skunkworks-atlas-docs-search
+frameworkVersion: '3'
+
+provider:
+  name: aws
+  runtime: nodejs14.x
+
+functions:
+  html2text:
+    handler: handler.html2text
+    events:
+      - httpApi:
+          path: /html2text
+          method: post

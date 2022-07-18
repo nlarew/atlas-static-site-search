@@ -1,0 +1,37 @@
+{
+  "version": "2.0",
+  "routeKey": "POST /parse",
+  "rawPath": "/parse",
+  "rawQueryString": "",
+  "headers": {
+    "accept": "*/*",
+    "content-length": "113",
+    "content-type": "application/xml",
+    "host": "ovxnui9i5h.execute-api.us-east-1.amazonaws.com",
+    "user-agent": "insomnia/2022.4.1",
+    "x-amzn-trace-id": "Root=1-62d5a755-7408d12a7f08b3547ab43a4b",
+    "x-forwarded-for": "66.232.252.246",
+    "x-forwarded-port": "443",
+    "x-forwarded-proto": "https"
+  },
+  "requestContext": {
+    "accountId": "948505087085",
+    "apiId": "ovxnui9i5h",
+    "domainName": "ovxnui9i5h.execute-api.us-east-1.amazonaws.com",
+    "domainPrefix": "ovxnui9i5h",
+    "http": {
+      "method": "POST",
+      "path": "/parse",
+      "protocol": "HTTP/1.1",
+      "sourceIp": "66.232.252.246",
+      "userAgent": "insomnia/2022.4.1"
+    },
+    "requestId": "VecVWhd4IAMEPZQ=",
+    "routeKey": "POST /parse",
+    "stage": "$default",
+    "time": "18/Jul/2022:18:32:53 +0000",
+    "timeEpoch": 1658169173289
+  },
+  "body": "<html><body><h1>Test pls ignore</h1><p>This is paragraph content. There are multiple sentences.</p></body></html>",
+  "isBase64Encoded": false
+}
