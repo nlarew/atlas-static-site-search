@@ -1,20 +1,12 @@
-<!--
-title: 'AWS Simple HTTP Endpoint example in NodeJS'
-description: 'This template demonstrates how to make a simple HTTP API with Node.js running on AWS Lambda and API Gateway using the Serverless Framework.'
-layout: Doc
-framework: v3
-platform: AWS
-language: nodeJS
-authorLink: 'https://github.com/serverless'
-authorName: 'Serverless, inc.'
-authorAvatar: 'https://avatars1.githubusercontent.com/u/13742415?s=200&v=4'
--->
+# Atlas Documentation Search - Serverless API on AWS
 
-# Serverless Framework Node HTTP API on AWS
+This project uses the [Serverless Framework](https://github.com/serverless/) to
+run an HTTP API. The API uses Node.js running on AWS Lambda.
 
-This template demonstrates how to make a simple HTTP API with Node.js running on AWS Lambda and API Gateway using the Serverless Framework.
+We're using this to perform resource-intensive compute tasks that Atlas
+Functions are currently unable to handle:
 
-This template does not include any kind of persistence (database). For more advanced examples, check out the [serverless/examples repository](https://github.com/serverless/examples/) which includes Typescript, Mongo, DynamoDB and other examples.
+- Given an HTML string, return the document in plain text (``html2text``)
 
 ## Usage
 
@@ -24,36 +16,39 @@ This template does not include any kind of persistence (database). For more adva
 $ serverless deploy
 ```
 
+The deploy should take around 1 minute to complete.
+
 After deploying, you should see output similar to:
 
 ```bash
-Deploying atlas-static-site-search to stage dev (us-east-1)
+Deploying skunkworks-atlas-docs-search to stage dev (us-east-1)
 
-✔ Service deployed to stack atlas-static-site-search-dev (152s)
+✔ Service deployed to stack skunkworks-atlas-docs-search-dev (152s)
 
-endpoint: GET - https://xxxxxxxxxx.execute-api.us-east-1.amazonaws.com/
+endpoint: POST - https://xxxxxxxxxx.execute-api.us-east-1.amazonaws.com/html2text
 functions:
-  hello: atlas-static-site-search-dev-hello (1.9 kB)
+  html2text: skunkworks-atlas-docs-search-dev-html2text (1.5 MB)
 ```
 
-_Note_: In current form, after deployment, your API is public and can be invoked by anyone. For production deployments, you might want to configure an authorizer. For details on how to do that, refer to [http event docs](https://www.serverless.com/framework/docs/providers/aws/events/apigateway/).
+_Note_: Currently the API is public and can be invoked by anyone. For production deployments, we'll want to configure an authorizer. For details on how to do that, refer to [http event docs](https://www.serverless.com/framework/docs/providers/aws/events/apigateway/).
 
 ### Invocation
 
 After successful deployment, you can call the created application via HTTP:
 
 ```bash
-curl https://xxxxxxx.execute-api.us-east-1.amazonaws.com/
+curl -X POST \
+  https://xxxxxxx.execute-api.us-east-1.amazonaws.com/html2text \
+  --data '{
+    "html": "<p>Hello, Skunkworks!</p>"
+  }'
 ```
 
 Which should result in response similar to the following (removed `input` content for brevity):
 
 ```json
 {
-  "message": "Go Serverless v2.0! Your function executed successfully!",
-  "input": {
-    ...
-  }
+  "text": "Hello, Skunkworks!",
 }
 ```
 
@@ -62,31 +57,14 @@ Which should result in response similar to the following (removed `input` conten
 You can invoke your function locally by using the following command:
 
 ```bash
-serverless invoke local --function hello
+serverless invoke local -f html2text --path mock-request-json.json
 ```
 
 Which should result in response similar to the following:
 
-```
+```json
 {
-  "statusCode": 200,
-  "body": "{\n  \"message\": \"Go Serverless v3.0! Your function executed successfully!\",\n  \"input\": \"\"\n}"
+    "statusCode": 200,
+    "body": "{\n  \"text\": \"TEST PLS IGNORE\\n\\nThis is paragraph content. There are multiple sentences.\"\n}"
 }
 ```
-
-
-Alternatively, it is also possible to emulate API Gateway and Lambda locally by using `serverless-offline` plugin. In order to do that, execute the following command:
-
-```bash
-serverless plugin install -n serverless-offline
-```
-
-It will add the `serverless-offline` plugin to `devDependencies` in `package.json` file as well as will add it to `plugins` in `serverless.yml`.
-
-After installation, you can start local emulation with:
-
-```
-serverless offline
-```
-
-To learn more about the capabilities of `serverless-offline`, please refer to its [GitHub repository](https://github.com/dherault/serverless-offline).
