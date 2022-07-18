@@ -19,10 +19,23 @@ afterAll(async () => {
 });
 
 test("searchAgg returns search results", async () => {
-  const res = await searchAgg(collection, "flutter sdk");
-  console.log(res);
+  const res = await searchAgg(collection, "flutter write data", 10, 0);
+  expect(res.length).toBe(10);
+  const someDoc = res[0];
+  expect(
+    Object.hasOwn(someDoc, "title") && Object.hasOwn(someDoc, "doc_text")
+  ).toBe(true);
 });
 
-test("searchAgg returns expected number of results", async () => {});
+test("searchAgg returns expected number of results", async () => {
+  const res5 = await searchAgg(collection, "flutter write data", 5, 0);
+  const res10 = await searchAgg(collection, "flutter write data", 10, 0);
+  expect(res5.length).toBe(5);
+  expect(res10.length).toBe(10);
+});
 
-test("searchAgg paginates results", async () => {});
+test("searchAgg paginates results", async () => {
+  const firstTwoRes = await searchAgg(collection, "flutter write data", 2, 0);
+  const secondRes = await searchAgg(collection, "flutter write data", 1, 1);
+  expect(firstTwoRes[1]._id === secondRes[0]._id).toBe(true);
+});
