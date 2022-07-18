@@ -1,4 +1,4 @@
-function getDocsFromHtml(html){
+async function getDocsFromHtml(html){
   const html2textUrl = "https://ovxnui9i5h.execute-api.us-east-1.amazonaws.com/html2text"
   return await axios.post(html2textUrl, { html });
 }
