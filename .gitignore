@@ -1,5 +1,6 @@
 .DS_Store
 node_modules
+mongodb-realm
 
 # must ignore package-lock.json in functions directory
 # to deploy using Realm Github integration
