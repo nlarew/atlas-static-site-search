@@ -1,3 +1,3 @@
 exports = async function () {
-  return "ok";
+  return "hey wassup hello";
 };
