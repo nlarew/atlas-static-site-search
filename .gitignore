@@ -1,2 +1,7 @@
 .DS_Store
 node_modules
+
+# must ignore package-lock.json in functions directory
+# to deploy using Realm Github integration
+# (this is a bug being addressed by https://jira.mongodb.org/browse/BAAS-14917)
+app-services/functions/package-lock.json
