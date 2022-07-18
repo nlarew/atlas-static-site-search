@@ -1,10 +1,7 @@
-function getDocsFromHtml(htmlStr){
-  const { NodeHtmlMarkdown } = require("node-html-markdown");
-  const removeMd = require('remove-markdown');
-
-  const md = NodeHtmlMarkdown.translate(htmlStr);
-  const plainText = removeMd(md);
-  return plainText;
+async function getDocsFromHtml(html){
+  const html2textUrl = "https://ovxnui9i5h.execute-api.us-east-1.amazonaws.com/html2text"
+  const response = await axios.post(html2textUrl, { html });
+  return response.data.text
 }
 
 exports = async function({ fullDocument }) {
@@ -20,9 +17,8 @@ exports = async function({ fullDocument }) {
   
   const pageUrl = fullDocument.loc;
   
-  const {data: html } = await axios.get(pageUrl);
+  const { data: html } = await axios.get(pageUrl);
   const docText = getDocsFromHtml(html);
-
   
   const titleRegex = /<title.*>(.*)<\/title>/;
   const pageTitleRes = titleRegex.exec(html);
