@@ -21,7 +21,7 @@ async function writePageContents({ fullDocument }) {
   const pageUrl = fullDocument.loc;
   
   const { data: html } = await axios.get(pageUrl);
-  const docText = getDocsFromHtml(html);
+  const docText = await getDocsFromHtml(html);
   
   const titleRegex = /<title.*>(.*)<\/title>/;
   const pageTitleRes = titleRegex.exec(html);
