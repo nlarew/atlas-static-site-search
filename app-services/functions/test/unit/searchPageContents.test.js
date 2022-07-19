@@ -22,7 +22,6 @@ test("searchAgg returns search results", async () => {
   const res = await searchAgg(collection, "flutter write data", 10, 0);
   expect(res.length).toBe(10);
   const someDoc = res[0];
-  console.log(someDoc.highlights);
   expect(
     Object.hasOwn(someDoc, "title") &&
       Object.hasOwn(someDoc, "doc_text") &&
