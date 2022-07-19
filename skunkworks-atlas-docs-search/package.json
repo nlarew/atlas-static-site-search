@@ -1,0 +1,6 @@
+{
+  "dependencies": {
+    "html-to-text": "^8.2.0",
+    "html2text": "^6.0.0"
+  }
+}

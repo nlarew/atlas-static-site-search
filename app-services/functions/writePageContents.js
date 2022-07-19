@@ -1,42 +1,54 @@
 async function getDocsFromHtml(html){
-  const html2textUrl = "https://ovxnui9i5h.execute-api.us-east-1.amazonaws.com/html2text"
+  const axios = require("axios");
+  const html2textUrl = context.values.get("html2textUrl");
   const response = await axios.post(html2textUrl, { html });
   return response.data.text
 }
 
-exports = async function({ fullDocument }) {
+async function writePageContents({ fullDocument }) {
   const axios = require("axios");
-  
 
   //for testing
-  if(!fullDocument){
+  if (!fullDocument) {
     fullDocument = {
-      loc: "https://www.mongodb.com/docs/realm/sdk/flutter/realm-database/"  
-    }
+      loc: "https://www.mongodb.com/docs/realm/sdk/flutter/realm-database/",
+      type: "TEST",
+    };
   }
-  
+  console.log("Sitemap entry:");
+  console.log(JSON.stringify(fullDocument, null, 2));
+
   const pageUrl = fullDocument.loc;
   
   const { data: html } = await axios.get(pageUrl);
-  const docText = getDocsFromHtml(html);
+  const docText = await getDocsFromHtml(html);
   
   const titleRegex = /<title.*>(.*)<\/title>/;
   const pageTitleRes = titleRegex.exec(html);
   let title;
-  if(pageTitleRes !== null){
+  if (pageTitleRes !== null) {
     title = pageTitleRes[1];
   }
 
   // update search index collection
-  const pageContents = context.services.get("mongodb-atlas").db("site-search").collection("page-contents");
+  const pageContents = context.services
+    .get("mongodb-atlas")
+    .db("site-search")
+    .collection("page-contents");
   const query = { _id: pageUrl };
   const updateDoc = {
     $set: {
       title,
       doc_text: docText,
     },
-    $currentDate: { last_updated: true }
+    $currentDate: { last_updated: true },
   };
   const options = { upsert: true };
   pageContents.updateOne(query, updateDoc, options);
-};
+}
+
+exports = writePageContents;
+
+if (typeof module !== "undefined") {
+  module.exports = { writePageContents, getDocsFromHtml };
+}
