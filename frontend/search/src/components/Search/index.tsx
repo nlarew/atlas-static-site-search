@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
@@ -8,99 +8,12 @@ import IconButton from "@mui/material/IconButton";
 import Divider from '@mui/material/Divider';
 import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
+import Skeleton from "@mui/material/Skeleton";
 import ListItemButton from '@mui/material/ListItemButton';
 import ListItemText from "@mui/material/ListItemText";
 import InputBase from '@mui/material/InputBase';
-
-// data from https://www.mongodb.com/docs/atlas/atlas-search/highlighting/
-const fakeSearchResults = [{
-  "description" : "Bananas are usually sold in bunches of five or six. ",
-  "highlights" : [
-    {
-      "path" : "description",
-      "texts" : [
-        {
-          "value" : "Bananas are usually sold in ",
-          "type" : "text"
-        },
-        {
-          "value" : "bunches",
-          "type" : "hit"
-        },
-        {
-          "value" : " of five or six. ",
-          "type" : "text"
-        }
-      ],
-      "score" : 1.2841906547546387
-    }
-  ]
-},
-{
-  "description" : "Bosc and Bartlett are the most common varieties of pears.",
-    "highlights" : [
-  {
-    "path" : "description",
-    "texts" : [
-      {
-        "value" : "Bosc and Bartlett are the most common ",
-        "type" : "text"
-      },
-      {
-        "value" : "varieties",
-        "type" : "hit"
-      },
-      {
-        "value" : " of pears.",
-        "type" : "text"
-      }
-    ],
-    "score" : 1.2691514492034912
-  }
-]
-},
-{
-  "description" : "Apples come in several varieties, including Fuji, Granny Smith, and Honeycrisp. The most popular varieties are McIntosh, Gala, and Granny Smith. ",
-    "highlights" : [
-  {
-    "path" : "description",
-    "texts" : [
-      {
-        "value" : "Apples come in several ",
-        "type" : "text"
-      },
-      {
-        "value" : "varieties",
-        "type" : "hit"
-      },
-      {
-        "value" : ", including Fuji, Granny Smith, and Honeycrisp. ",
-        "type" : "text"
-      }
-    ],
-    "score" : 1.0330637693405151
-  },
-  {
-    "path" : "description",
-    "texts" : [
-      {
-        "value" : "The most popular ",
-        "type" : "text"
-      },
-      {
-        "value" : "varieties",
-        "type" : "hit"
-      },
-      {
-        "value" : " are McIntosh, Gala, and Granny Smith. ",
-        "type" : "text"
-      }
-    ],
-    "score" : 1.0940992832183838
-  },
-]
-}]
-
+import Typography from '@mui/material/Typography';
+import {Result} from '../../types';
 
 const style = {
   width: 600,
@@ -110,10 +23,20 @@ const style = {
   height: 600
 };
 
-export default function SearchModal() {
+interface SearchModalProps {
+  query: string,
+  handleQueryChange: Function,
+  searchResults: Array<Result>,
+  loading: boolean,
+  noResults: boolean,
+}
+
+export default function SearchModal({query, handleQueryChange, searchResults, loading, noResults}: SearchModalProps) {
 
   const [open, setOpen] = useState(false);
   const [selected, setSelected] = useState(0);
+
+
 
   return (
       <>
@@ -170,16 +93,41 @@ export default function SearchModal() {
                   padding: "15px",
                   fontSize: "18px"
                 }}
+                onChange={(e) => handleQueryChange(e)}
+                value={query}
             />
 
             <List
                 component="nav"
                 style={{
-                  width: "95%"
+                  width: "95%",
+                  height: "100%",
+                  overflow: "auto"
                 }}
             >
               {
-                fakeSearchResults.map((searchResult, idx) =>{
+                loading &&
+                    [...Array(10)].map((e) => <Skeleton
+                        sx={{
+                          width: '100%',
+                          minHeight: "100px"
+                        }}
+                    />)
+              }
+              {
+                noResults &&
+                    <>
+                      <Typography variant={"h1"}>
+                        🥭
+                      </Typography>
+                      <Typography variant={"h5"}>
+                        Could only find this mango...
+                      </Typography>
+                    </>
+              }
+              {
+                !loading &&
+                searchResults.map((searchResult, idx) =>{
                   return (
                       <ListItemButton
                           onClick={() => {}}
@@ -191,6 +139,13 @@ export default function SearchModal() {
                           onMouseOver={() => setSelected(idx)}
                       >
                         {
+                          !searchResult.highlights &&
+                          <ListItemText>
+                            {searchResult.title}
+                          </ListItemText>
+                        }
+                        {
+                          searchResult.highlights &&
                           searchResult.highlights.map((highlight) => {
 
                             return (
