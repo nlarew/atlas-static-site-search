@@ -1,4 +1,7 @@
 {
+"collectionName": "page-contents",
+"database": "site-search",
+"name": "site_index",
   "mappings": {
     "dynamic": true,
     "fields": {
