@@ -1,15 +1,7 @@
-function extractRelevantContent(html) {
-  const { parse } = require('node-html-parser');
-  const root = parse(html);
-  const bodyElems = root.querySelector(".body").toString();
-  return bodyElems;
-}
-
 async function getDocsFromHtml(html){
   const axios = require("axios");
-  const content = extractRelevantContent(html);
   const html2textUrl = context.values.get("html2textUrl");
-  const response = await axios.post(html2textUrl, { content });
+  const response = await axios.post(html2textUrl, { html });
   return response.data.text
 }
 
