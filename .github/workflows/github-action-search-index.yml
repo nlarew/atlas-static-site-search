@@ -5,7 +5,7 @@ paths:
 env: 
   PUBLIC_KEY: supndmzt
   GROUP_ID: 627586aa915a0f72783d661c
-  PROJECT_NAME: docs-search
+  CLUSTER_NAME: Cluster0
   PRIVATE_KEY: ${{ secrets.PRIVATE_KEY }}
 jobs:
   Explore-GitHub-Actions:
