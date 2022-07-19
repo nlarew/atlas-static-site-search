@@ -1,8 +1,8 @@
 function extractRelevantContent(html) {
   const { parse } = require('node-html-parser');
   const root = parse(html);
-  const bodyParagrahElems = root.querySelector(".body").getElementsByTagName("p").join();
-  return bodyParagrahElems;
+  const bodyElems = root.querySelector(".body").toString();
+  return bodyElems;
 }
 
 async function getDocsFromHtml(html){
