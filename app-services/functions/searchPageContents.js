@@ -9,12 +9,17 @@ async function searchAgg(collection, query, limit, skip) {
             wildcard: "*",
           },
         },
+        highlight: {
+          path: "doc_text",
+          maxNumPassages: 1,
+        },
       },
     },
     {
       $project: {
         title: 1,
         doc_text: 1,
+        highlights: { $meta: "searchHighlights" },
       },
     },
     {
