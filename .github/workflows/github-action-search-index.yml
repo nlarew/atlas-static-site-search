@@ -1,7 +1,8 @@
 name: Update the Search Index Definition
-on: [push]
-paths:
-  - '**/site_index.json'
+on:
+  push:
+    paths:
+      - '**/site_index.json'
 env: 
   PUBLIC_KEY: supndmzt
   GROUP_ID: 627586aa915a0f72783d661c
