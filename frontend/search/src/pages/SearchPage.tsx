@@ -61,7 +61,7 @@ export default function SearchPage() {
           }}
       >
         <Typography variant="h3">
-          Mango Search
+          🥭
         </Typography>
         <Search
           searchResults={results}

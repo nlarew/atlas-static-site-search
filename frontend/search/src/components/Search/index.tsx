@@ -14,6 +14,7 @@ import ListItemText from "@mui/material/ListItemText";
 import InputBase from '@mui/material/InputBase';
 import Typography from '@mui/material/Typography';
 import {Result} from '../../types';
+import {decode} from 'html-entities';
 
 const style = {
   width: 600,
@@ -127,12 +128,19 @@ export default function SearchModal({query, handleQueryChange, searchResults, lo
               {
                 noResults &&
                     <>
-                      <Typography variant={"h1"}>
-                        🥭
-                      </Typography>
-                      <Typography variant={"h5"}>
-                        Could only find this mango...
-                      </Typography>
+                      <div
+                        style={{
+                          display: 'flex',
+                          justifyContent: 'center',
+                          alignItems: 'center',
+                          flexDirection: 'column',
+                          height: '100%'
+                        }}
+                      >
+                        <Typography variant={"h1"}>
+                          🥭
+                        </Typography>
+                      </div>
                     </>
               }
               {
@@ -157,7 +165,7 @@ export default function SearchModal({query, handleQueryChange, searchResults, lo
                                 }}
                               >
                                 <ListItemText>
-                                  {searchResult.title}
+                                  {decode(searchResult.title)}
                                 </ListItemText>
 
                                 {
