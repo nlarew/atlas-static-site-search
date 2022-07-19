@@ -1,13 +1,10 @@
 import React, {useState, useEffect} from 'react';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
-import TextField from '@mui/material/TextField';
 import Modal from '@mui/material/Modal';
 import SearchIcon from '@mui/icons-material/Search';
 import IconButton from "@mui/material/IconButton";
-import Divider from '@mui/material/Divider';
 import List from '@mui/material/List';
-import ListItem from '@mui/material/ListItem';
 import Skeleton from "@mui/material/Skeleton";
 import ListItemButton from '@mui/material/ListItemButton';
 import ListItemText from "@mui/material/ListItemText";
@@ -157,7 +154,7 @@ export default function SearchModal({query, handleQueryChange, searchResults, lo
                           onMouseOver={() => setSelected(idx)}
                       >
                         {
-                          !searchResult.highlights &&
+                          // !searchResult.highlights &&
                               <div
                                   style={{
                                     display: 'flex',
@@ -181,36 +178,37 @@ export default function SearchModal({query, handleQueryChange, searchResults, lo
                                 }
                               </div>
                         }
-                        {
-                          searchResult.highlights &&
-                          searchResult.highlights.map((highlight) => {
 
-                            return (
-                                <ListItemText>
-                                  <>
-                                    {
-                                      highlight.texts.map((text) => {
+                        {/*{*/}
+                        {/*  searchResult.highlights &&*/}
+                        {/*  searchResult.highlights.map((highlight) => {*/}
 
-                                        if (text.type === "hit") {
-                                          return (
-                                              <b>
-                                                {text.value}
-                                              </b>
-                                          )
-                                        }
+                        {/*    return (*/}
+                        {/*        <ListItemText>*/}
+                        {/*          <>*/}
+                        {/*            {*/}
+                        {/*              highlight.texts.map((text) => {*/}
 
-                                        return (
-                                            <>
-                                              {text.value}
-                                            </>
-                                        )
-                                      })
-                                    }
-                                  </>
-                                </ListItemText>
+                        {/*                if (text.type === "hit") {*/}
+                        {/*                  return (*/}
+                        {/*                      <b>*/}
+                        {/*                        {text.value}*/}
+                        {/*                      </b>*/}
+                        {/*                  )*/}
+                        {/*                }*/}
 
-                                )})
-                        }
+                        {/*                return (*/}
+                        {/*                    <>*/}
+                        {/*                      {text.value}*/}
+                        {/*                    </>*/}
+                        {/*                )*/}
+                        {/*              })*/}
+                        {/*            }*/}
+                        {/*          </>*/}
+                        {/*        </ListItemText>*/}
+
+                        {/*        )})*/}
+                        {/*}*/}
 
                       </ListItemButton>
                   )
