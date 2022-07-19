@@ -36,7 +36,17 @@ export default function SearchModal({query, handleQueryChange, searchResults, lo
   const [open, setOpen] = useState(false);
   const [selected, setSelected] = useState(0);
 
+  // Hard-coded to expect starting https://www. ...
+  // Also should be moved to parent so this component can be oblivious and just grab .link
+  const truncateLink = (text: string) => {
+    const maxCharLength = 80;
+    let suffix = '';
+    if (text.length > maxCharLength) {
+      suffix = '...';
+    }
 
+    return `${text.substring(12,maxCharLength)}${suffix}`;
+  }
 
   return (
       <>
@@ -130,7 +140,7 @@ export default function SearchModal({query, handleQueryChange, searchResults, lo
                 searchResults.map((searchResult, idx) =>{
                   return (
                       <ListItemButton
-                          onClick={() => {}}
+                          onClick={() => window.open(searchResult._id)}
                           style={{
                             width: "100%",
                             borderRadius: "10px",
@@ -140,9 +150,28 @@ export default function SearchModal({query, handleQueryChange, searchResults, lo
                       >
                         {
                           !searchResult.highlights &&
-                          <ListItemText>
-                            {searchResult.title}
-                          </ListItemText>
+                              <div
+                                  style={{
+                                    display: 'flex',
+                                    flexDirection: "column"
+                                }}
+                              >
+                                <ListItemText>
+                                  {searchResult.title}
+                                </ListItemText>
+
+                                {
+                                  searchResult._id &&
+                                  <span
+                                    style={{
+                                      color: "gray",
+                                      fontSize: 12
+                                    }}
+                                  >
+                                    {truncateLink(searchResult._id)}
+                                  </span>
+                                }
+                              </div>
                         }
                         {
                           searchResult.highlights &&

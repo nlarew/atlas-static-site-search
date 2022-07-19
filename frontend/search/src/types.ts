@@ -1,5 +1,6 @@
 // the searchPageContents function returns a Results[]
 export interface Result {
+  _id: string,
   title: string;
   doc_text: string;
   // see https://www.mongodb.com/docs/atlas/atlas-search/highlighting/#output
