@@ -12,6 +12,16 @@ module.exports.html2text = async (event) => {
   $("html").find("footer").remove();
   $("html").find("nav").remove();
 
+  const title = $("html")
+    .find("title")
+    .get()[0]
+    .innerHTML
+
+  const headings = $("html")
+    .find(":header")
+    .get()
+    .map((h) => h.innerHTML);
+  
   const content = $("html").get()[0].innerHTML;
 
   const { convert } = require("html-to-text");
@@ -29,10 +39,12 @@ module.exports.html2text = async (event) => {
     statusCode: 200,
     body: JSON.stringify(
       {
+        title,
+        headings,
         text,
       },
       null,
       2
     ),
-  }
+  };
 }
