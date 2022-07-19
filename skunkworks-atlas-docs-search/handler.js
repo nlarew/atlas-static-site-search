@@ -11,11 +11,18 @@ module.exports.html2text = async (event) => {
   $("html").find("header").remove();
   $("html").find("footer").remove();
   $("html").find("nav").remove();
+
   const content = $("html").get()[0].innerHTML;
 
   const { convert } = require("html-to-text");
   const text = convert(content, {
     wordwrap: false,
+    selectors: [
+      {
+        selector: "a",
+        options: { ignoreHref: true }
+      }
+    ],
   });
   
   return {
