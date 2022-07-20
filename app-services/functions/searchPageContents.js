@@ -39,20 +39,7 @@ async function search(collection, { query = "", limit = 10, skip = 0 }) {
             {
               autocomplete: {
                 query: query,
-                path: [
-                  "title",
-                  "headings.h_1",
-                  "headings.h_2",
-                  "headings.h_3",
-                  "headings.h_4",
-                  "headings.h_5",
-                  "headings.h_6",
-                  "headings.h_7",
-                  "headings.h_8",
-                  "headings.h_9",
-                  "headings.h_10",
-                  "headings.h_11",
-                ],
+                path: "title",
                 tokenOrder: "sequential",
                 fuzzy: {
                   maxEdits: 1,
@@ -65,6 +52,102 @@ async function search(collection, { query = "", limit = 10, skip = 0 }) {
               text: {
                 query: query,
                 path: "doc_text",
+                fuzzy: {
+                  maxEdits: 1,
+                  prefixLength: 0,
+                  maxExpansions: 50,
+                },
+              },
+            },
+            {
+              autocomplete: {
+                query: query,
+                path: "headings.h_1",
+                tokenOrder: "sequential",
+                fuzzy: {
+                  maxEdits: 1,
+                  prefixLength: 0,
+                  maxExpansions: 50,
+                },
+              },
+            },
+            {
+              autocomplete: {
+                query: query,
+                path: "headings.h_2",
+                tokenOrder: "sequential",
+                fuzzy: {
+                  maxEdits: 1,
+                  prefixLength: 0,
+                  maxExpansions: 50,
+                },
+              },
+            },
+            {
+              autocomplete: {
+                query: query,
+                path: "headings.h_3",
+                tokenOrder: "sequential",
+                fuzzy: {
+                  maxEdits: 1,
+                  prefixLength: 0,
+                  maxExpansions: 50,
+                },
+              },
+            },
+            {
+              autocomplete: {
+                query: query,
+                path: "headings.h_4",
+                tokenOrder: "sequential",
+                fuzzy: {
+                  maxEdits: 1,
+                  prefixLength: 0,
+                  maxExpansions: 50,
+                },
+              },
+            },
+            {
+              autocomplete: {
+                query: query,
+                path: "headings.h_5",
+                tokenOrder: "sequential",
+                fuzzy: {
+                  maxEdits: 1,
+                  prefixLength: 0,
+                  maxExpansions: 50,
+                },
+              },
+            },
+            {
+              autocomplete: {
+                query: query,
+                path: "headings.h_6",
+                tokenOrder: "sequential",
+                fuzzy: {
+                  maxEdits: 1,
+                  prefixLength: 0,
+                  maxExpansions: 50,
+                },
+              },
+            },
+            {
+              autocomplete: {
+                query: query,
+                path: "headings.h_7",
+                tokenOrder: "sequential",
+                fuzzy: {
+                  maxEdits: 1,
+                  prefixLength: 0,
+                  maxExpansions: 50,
+                },
+              },
+            },
+            {
+              autocomplete: {
+                query: query,
+                path: "headings.h_8",
+                tokenOrder: "sequential",
                 fuzzy: {
                   maxEdits: 1,
                   prefixLength: 0,
