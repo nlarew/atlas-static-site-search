@@ -15,7 +15,7 @@ export class API {
   }
 
   public async searchDocs(query: string) {
-    return await this.user?.functions.searchPageContents(query);
+    return await this.user?.functions.searchPageContents({ query });
   }
 
   private async logInUser() {
