@@ -28,10 +28,8 @@ module.exports.html2text = async (event) => {
   const text = convert(content, {
     wordwrap: false,
     selectors: [
-      {
-        selector: "a",
-        options: { ignoreHref: true },
-      },
+      { selector: "a", options: { ignoreHref: true } },
+      { selector: "img", format: "skip" },
     ],
   });
 
