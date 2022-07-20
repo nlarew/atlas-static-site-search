@@ -13,15 +13,15 @@ async function search_test({ query = "", limit = 10, skip = 0, __test_collection
   if (!__test_collection) {
     throw new Error(`You must provide an SDK collection in __test_collection`);
   }
-  if (!query) {
-    query = "flutter open close realm";
-  }
   
   // SDK collections return a Promise<Document[]>, so we call `[0]` to get the result
   return (await search(__test_collection, { query, limit, skip }))[0];
 }
 
 async function search(collection, { query = "", limit = 10, skip = 0 }) {
+  if(query === "") {
+    throw new Error(`No query provided. You must pass a string with length > 0.`)
+  }
   const searchResults = await collection.aggregate([
     // Search for the provided query string
     {

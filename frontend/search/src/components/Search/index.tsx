@@ -257,6 +257,7 @@ export default function SearchModal({
               searchResults.map((searchResult, idx) => {
                 return (
                   <ListItemButton
+                    key={String(searchResult._id)}
                     onClick={() => window.open(searchResult._id)}
                     style={{
                       width: "100%",
@@ -304,9 +305,9 @@ export default function SearchModal({
                           searchResult.highlights.length > 0 && // for multiple highlights we only grab one for now -- may add extra feature later
                           searchResult.highlights
                             .slice(0, 1)
-                            .map((highlight) => {
+                            .map((highlight, i) => {
                               return (
-                                <>
+                                <div key={searchResult._id + `_highlight_${i}`}>
                                   <HighlightedText
                                     inFocus={selected === idx}
                                     textDocs={highlight.texts}
@@ -327,7 +328,7 @@ export default function SearchModal({
                                   >
                                     {truncateText(decode(searchResult.title))}
                                   </span>
-                                </>
+                                </div>
                               );
                             })}
                       </div>
