@@ -257,8 +257,6 @@ export default function SearchModal({query, handleQueryChange, searchResults, lo
                                 }}
                               >
                                 {
-                                  // TODO: can remove this eventually because highlights will probably always appear
-                                    // but for now this is testing purposes
                                   !searchResult.highlights || (searchResult.highlights && searchResult.highlights.length === 0) &&
                                     <>
                                       <p
@@ -299,7 +297,7 @@ export default function SearchModal({query, handleQueryChange, searchResults, lo
                                                     fontSize: ".9em"
                                                   }}
                                               />
-                                              
+
                                               <span
                                                   style={{
                                                     color: selected === idx ? "white" : "gray",
