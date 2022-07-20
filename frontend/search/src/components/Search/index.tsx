@@ -12,6 +12,7 @@ import InputBase from '@mui/material/InputBase';
 import Typography from '@mui/material/Typography';
 import {Result, Documents} from '../../types';
 import {decode} from 'html-entities';
+import LinearProgress from '@mui/material/LinearProgress';
 
 const style = {
   width: 550,
@@ -40,6 +41,10 @@ const truncateText = (text: string, startingChar: number = 0, maxCharLength: num
             :
             `${placeholder}${text.substring((text.length-maxCharLength)+startingChar, text.length)}`
     );
+  }
+
+  if (startingChar > 0) {
+    return text.substring(startingChar,startingChar+maxCharLength);
   }
 
   return text;
@@ -171,12 +176,24 @@ export default function SearchModal({query, handleQueryChange, searchResults, lo
             >
               {
                 loading &&
-                    [...Array(10)].map((e) => <Skeleton
-                        sx={{
-                          width: '100%',
-                          minHeight: "100px"
-                        }}
-                    />)
+                    <>
+                      <LinearProgress color={"success"} />
+                      <div
+                          style={{
+                            display: 'flex',
+                            justifyContent: 'center',
+                            alignItems: 'center',
+                            flexDirection: 'column',
+                            height: '100%',
+                            opacity: '1',
+                            animation: 'fade 1.5s linear'
+                          }}
+                      >
+                        <Typography variant={"h1"}>
+                          🥭
+                        </Typography>
+                      </div>
+                    </>
               }
               {
                 noResults &&
@@ -243,34 +260,34 @@ export default function SearchModal({query, handleQueryChange, searchResults, lo
                                   // TODO: can remove this eventually because highlights will probably always appear
                                     // but for now this is testing purposes
                                   !searchResult.highlights || (searchResult.highlights && searchResult.highlights.length === 0) &&
-                                    <span
-                                      style={{
-                                        color: "gray",
-                                        fontSize: 12
-                                      }}
-                                    >
-                                      No direct hits
-                                    </span>
+                                    <>
+                                      <p
+                                          style={{
+                                            color: selected === idx ? "white" : "black",
+                                            margin: 0,
+                                            fontSize: ".9em"
+                                          }}
+                                      >
+                                        {truncateText(decode(searchResult.title))}
+                                      </p>
+
+                                      <span
+                                          style={{
+                                            color: selected === idx ? "white" : "gray",
+                                            fontSize: ".75em"
+                                          }}
+                                      >
+                                        {truncateText(searchResult._id, 12)}
+                                      </span>
+                                    </>
                                 }
                                 {
                                   searchResult.highlights &&
                                       searchResult.highlights.length > 0 && // for multiple highlights we only grab one for now -- may add extra feature later
                                       searchResult.highlights.slice(0,1).map((highlight) => {
-
-                                        if (!highlight.texts || (highlight.texts && highlight.texts.length === 0)) {
-                                          return (
-                                              <span
-                                                  style={{
-                                                    color: "gray",
-                                                    fontSize: 12
-                                                  }}
-                                              >
-                                              No direct match
-                                            </span>
-                                          )
-                                        }
-
                                         return (
+
+                                            <>
                                               <HighlightedText
                                                   inFocus={
                                                     selected === idx
@@ -282,19 +299,21 @@ export default function SearchModal({query, handleQueryChange, searchResults, lo
                                                     fontSize: ".9em"
                                                   }}
                                               />
+                                              
+                                              <span
+                                                  style={{
+                                                    color: selected === idx ? "white" : "gray",
+                                                    fontSize: ".75em"
+                                                  }}
+                                              >
+                                                {truncateText(decode(searchResult.title))}
+                                              </span>
+
+                                            </>
                                         )
 
                                       })
                                 }
-
-                                <span
-                                  style={{
-                                    color: selected === idx ? "white" : "gray",
-                                    fontSize: ".75em"
-                                  }}
-                                >
-                                  {truncateText(decode(searchResult.title))}
-                                </span>
                               </div>
                         }
                       </ListItemButton>
