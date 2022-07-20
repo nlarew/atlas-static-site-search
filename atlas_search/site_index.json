@@ -628,18 +628,6 @@
             {
               "type": "autocomplete"
             }
-          ], 
-          "h_51": [
-            {
-              "dynamic": true,
-              "type": "document"
-            },
-            {
-              "type": "string"
-            },
-            {
-              "type": "autocomplete"
-            }
           ]
         }
       }
