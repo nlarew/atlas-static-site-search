@@ -5,9 +5,7 @@ import Modal from "@mui/material/Modal";
 import SearchIcon from "@mui/icons-material/Search";
 import IconButton from "@mui/material/IconButton";
 import List from "@mui/material/List";
-import Skeleton from "@mui/material/Skeleton";
 import ListItemButton from "@mui/material/ListItemButton";
-import ListItemText from "@mui/material/ListItemText";
 import InputBase from "@mui/material/InputBase";
 import Typography from "@mui/material/Typography";
 import { Result, Documents } from "../../types";
@@ -15,6 +13,7 @@ import { decode } from "html-entities";
 import LinearProgress from "@mui/material/LinearProgress";
 import mongoSearchIcon from "./query_search.png";
 import { Link } from "@mui/material";
+import SearchHistory, {addResultToSearchHistory} from "../History";
 
 const style = {
   width: 550,
@@ -257,8 +256,11 @@ export default function SearchModal({
               searchResults.map((searchResult, idx) => {
                 return (
                   <ListItemButton
+                    onClick={() => {
+                      window.open(searchResult._id);
+                      addResultToSearchHistory(searchResult);
+                    }}
                     key={String(searchResult._id)}
-                    onClick={() => window.open(searchResult._id)}
                     style={{
                       width: "100%",
                       borderRadius: "10px",
@@ -336,6 +338,10 @@ export default function SearchModal({
                   </ListItemButton>
                 );
               })}
+              {
+                !loading && !noResults &&
+                <SearchHistory/>
+              }
           </List>
           <Typography variant="subtitle1">
             Powered by{" "}
