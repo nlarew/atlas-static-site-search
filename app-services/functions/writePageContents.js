@@ -33,7 +33,7 @@ async function writePageContents({ fullDocument }) {
     $set: {
       title,
       doc_text,
-      headings: { ...headings },
+      headings,
     },
     $currentDate: { last_updated: true },
   };
