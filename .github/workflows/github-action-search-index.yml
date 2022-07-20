@@ -10,12 +10,12 @@ env:
   CLUSTER_NAME: Cluster0
   PRIVATE_KEY: ${{ secrets.PRIVATE_KEY }}
 jobs:
-  Explore-GitHub-Actions:
+  Publish-Atlas-Search-Index:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
       - run: echo "🎉 The job was automatically triggered by a ${{ github.event_name }} event."
       - run: echo "🐧 This job is now running on a ${{ runner.os }} server hosted by GitHub!"
       - run: pwd
-      - run: chmod +x ${GITHUB_WORKSPACE}/.github/create-atlas-search-index.sh
-      - run: bash ${GITHUB_WORKSPACE}/.github/create-atlas-search-index.sh ${GITHUB_WORKSPACE}/atlas_search/site_index.json
+      - run: chmod +x ${GITHUB_WORKSPACE}/scripts/create-atlas-search-index.sh
+      - run: bash ${GITHUB_WORKSPACE}/scripts/create-atlas-search-index.sh ${GITHUB_WORKSPACE}/atlas_search/site_index.json
