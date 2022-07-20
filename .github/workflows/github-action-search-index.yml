@@ -2,8 +2,8 @@ name: Update the Search Index Definition
 on:
   push:
     paths:
-      - '**/site_index.json'
-env: 
+      - "**/site_index.json"
+env:
   PUBLIC_KEY: supndmzt
   GROUP_ID: 627586aa915a0f72783d661c
   CLUSTER_NAME: Cluster0
@@ -14,4 +14,5 @@ jobs:
     steps:
       - run: echo "🎉 The job was automatically triggered by a ${{ github.event_name }} event."
       - run: echo "🐧 This job is now running on a ${{ runner.os }} server hosted by GitHub!"
-      - run: ./home/runner/work/atlas-static-site-search/scripts/create-atlas-search-index.sh ${GITHUB_WORKSPACE}/atlas_search/site_index.json
+      - run: chmod +x ${GITHUB_WORKSPACE}/scripts/create-atlas-search-index.sh
+      - run: bash ${GITHUB_WORKSPACE}/scripts/create-atlas-search-index.sh ${GITHUB_WORKSPACE}/atlas_search/site_index.json
