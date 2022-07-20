@@ -3,24 +3,31 @@ async function search_prod({ query = "", limit = 10, skip = 0 }) {
     .get("mongodb-atlas")
     .db("site-search")
     .collection("page-contents");
-  
+
   // Atlas Function collections return a Cursor, so we call `.next()` to get the result
   return (await search(pageContents, { query, limit, skip })).next();
 }
 
-async function search_test({ query = "", limit = 10, skip = 0, __test_collection }) {
+async function search_test({
+  query = "",
+  limit = 10,
+  skip = 0,
+  __test_collection,
+}) {
   // for testing purposes
   if (!__test_collection) {
     throw new Error(`You must provide an SDK collection in __test_collection`);
   }
-  
+
   // SDK collections return a Promise<Document[]>, so we call `[0]` to get the result
   return (await search(__test_collection, { query, limit, skip }))[0];
 }
 
 async function search(collection, { query = "", limit = 10, skip = 0 }) {
-  if(query === "") {
-    throw new Error(`No query provided. You must pass a string with length > 0.`)
+  if (query === "") {
+    throw new Error(
+      `No query provided. You must pass a string with length > 0.`
+    );
   }
   const searchResults = await collection.aggregate([
     // Search for the provided query string
@@ -30,17 +37,22 @@ async function search(collection, { query = "", limit = 10, skip = 0 }) {
         compound: {
           should: [
             {
-              text: {
-                query,
-                path: {
-                  wildcard: "*",
-                },
-              },
-            },
-            {
               autocomplete: {
                 query: query,
-                path: "title",
+                path: [
+                  "title",
+                  "headings.h_1",
+                  "headings.h_2",
+                  "headings.h_3",
+                  "headings.h_4",
+                  "headings.h_5",
+                  "headings.h_6",
+                  "headings.h_7",
+                  "headings.h_8",
+                  "headings.h_9",
+                  "headings.h_10",
+                  "headings.h_11",
+                ],
                 tokenOrder: "sequential",
                 fuzzy: {
                   maxEdits: 1,
@@ -50,10 +62,9 @@ async function search(collection, { query = "", limit = 10, skip = 0 }) {
               },
             },
             {
-              autocomplete: {
+              text: {
                 query: query,
                 path: "doc_text",
-                tokenOrder: "any",
                 fuzzy: {
                   maxEdits: 1,
                   prefixLength: 0,
@@ -136,7 +147,7 @@ async function search(collection, { query = "", limit = 10, skip = 0 }) {
   ]);
 
   return searchResults;
-};
+}
 
 exports = search_prod;
 
