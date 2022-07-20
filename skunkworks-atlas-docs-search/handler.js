@@ -1,27 +1,27 @@
 "use strict";
 
 module.exports.html2text = async (event) => {
-  const { html } = JSON.parse(event.body)
-  
+  const { html } = JSON.parse(event.body);
+
   const jsdom = require("jsdom");
   const { JSDOM } = jsdom;
-  const dom = new JSDOM(html.toString())
-  const $ = (require('jquery'))(dom.window);
+  const dom = new JSDOM(html.toString());
+  const $ = require("jquery")(dom.window);
 
   $("html").find("header").remove();
   $("html").find("footer").remove();
   $("html").find("nav").remove();
 
-  const title = $("html")
-    .find("title")
-    .get()[0]
-    .innerHTML
+  const title = $("html").find("title").get()[0].innerHTML;
 
-  const headings = $("html")
-    .find(":header")
-    .get()
-    .map((h) => h.innerHTML);
-  
+  const MAX_HEADINGS = 50;
+  const headings = Object.fromEntries(
+    $("html")
+      .find(":header")
+      .get()
+      .filter((h, i) => i + 1 <= MAX_HEADINGS)
+      .map((h, i) => [`h_${i + 1}`, h.innerHTML])
+  );
   const content = $("html").get()[0].innerHTML;
 
   const { convert } = require("html-to-text");
@@ -30,21 +30,21 @@ module.exports.html2text = async (event) => {
     selectors: [
       {
         selector: "a",
-        options: { ignoreHref: true }
-      }
+        options: { ignoreHref: true },
+      },
     ],
   });
-  
+
   return {
     statusCode: 200,
     body: JSON.stringify(
       {
-        title,
-        headings,
         text,
+        title,
+        ...headings,
       },
       null,
       2
     ),
   };
-}
+};
