@@ -15,12 +15,45 @@ export default function SearchPage() {
   }
   const [results, setResults] = useState([]);
 
+  const fakeHighlights = [
+    {
+      "path" : "description",
+      "texts" : [
+        {
+          "value" : "The greatest of all fruits is naturally the ",
+          "type" : "text"
+        },
+        {
+          "value" : "Mango",
+          "type" : "hit"
+        },
+        {
+          "value" : " especially when it is served ",
+          "type" : "text"
+        },
+        {
+          "value" : " with sticky rice ",
+          "type" : "text"
+        }
+      ],
+      "score" : 1.2841906547546387
+    }
+  ];
+
   async function getNewSearchResults() {
     if (!query || !query.trim()) {
       setResults([]);
     } else {
       const results = await api.searchDocs(query);
-      setResults(results ?? []);
+      let modifiedResults = results;
+
+      // JUST FOR TESTING PURPOSES FOR NOW (BECAUSE THERE ARE NO HIGHLIGHTS IN API)
+      if (results && results.length > 0 && !results[0].highlights) {
+        modifiedResults.map((result: any) => {
+          result['highlights'] = fakeHighlights;
+        })
+      }
+      setResults(modifiedResults ?? []);
     }
   }
 

@@ -10,15 +10,16 @@ import ListItemButton from '@mui/material/ListItemButton';
 import ListItemText from "@mui/material/ListItemText";
 import InputBase from '@mui/material/InputBase';
 import Typography from '@mui/material/Typography';
-import {Result} from '../../types';
+import {Result, Documents} from '../../types';
 import {decode} from 'html-entities';
 
 const style = {
-  width: 600,
-  bgcolor: 'background.paper',
+  width: 550,
+  backgroundColor: 'background.paper',
   borderRadius: "10px",
   boxShadow: 5,
-  height: 600
+  height: 600,
+  p: 2,
 };
 
 interface SearchModalProps {
@@ -29,22 +30,74 @@ interface SearchModalProps {
   noResults: boolean,
 }
 
+const truncateText = (text: string, startingChar: number = 0, maxCharLength: number = 80, truncateOnRight = true, truncatedPartPlaceholder = '...') => {
+  let placeholder = '';
+  if (text.length > maxCharLength) {
+    placeholder = truncatedPartPlaceholder;
+    return (
+        truncateOnRight ?
+            `${text.substring(startingChar,startingChar+maxCharLength)}${placeholder}`
+            :
+            `${placeholder}${text.substring((text.length-maxCharLength)+startingChar, text.length)}`
+    );
+  }
+
+  return text;
+}
+
+interface HighLightedTextProps {
+  inFocus: boolean,
+  textDocs: Array<Documents>,
+  // other props
+  [x: string]: any,
+}
+
+const HighlightedText = ({inFocus, textDocs, ...rest}: HighLightedTextProps) => {
+  let textBeforeHighlight = [];
+  let textAfterHighlight = [];
+  let highlightPos = -1;
+  let highlightText = '';
+  let beforeHighlight = true;
+  for (let i = 0; i < textDocs.length; i++) {
+    const textDoc = textDocs[i];
+    if (textDoc.type === "hit") {
+      beforeHighlight = false;
+      highlightText = textDoc.value;
+      highlightPos = i;
+      continue;
+    }
+
+    if (highlightPos < 0) {
+      textBeforeHighlight.push(textDocs[i].value);
+    } else {
+      textAfterHighlight.push(textDocs[i].value);
+    }
+  }
+
+  let textBefore = textBeforeHighlight.length > 0 ? textBeforeHighlight.join('') : '';
+  let textAfter = textAfterHighlight.length > 0 ? textAfterHighlight.join('') : '';
+
+  return <p {...rest}>
+    {truncateText(decode(textBefore), 0, 30, false)}
+    {highlightText &&
+      <em
+          style={{
+            textDecoration: inFocus ? "underline" : "",
+            color: inFocus ? "inherit" : "#92D293",
+            fontStyle: "normal"
+          }}
+      >
+        {decode(highlightText)}
+      </em>
+    }
+    {truncateText(decode(textAfter), 0, 30)}
+  </p>
+}
+
 export default function SearchModal({query, handleQueryChange, searchResults, loading, noResults}: SearchModalProps) {
 
   const [open, setOpen] = useState(false);
   const [selected, setSelected] = useState(0);
-
-  // Hard-coded to expect starting https://www. ...
-  // Also should be moved to parent so this component can be oblivious and just grab .link
-  const truncateLink = (text: string) => {
-    const maxCharLength = 80;
-    let suffix = '';
-    if (text.length > maxCharLength) {
-      suffix = '...';
-    }
-
-    return `${text.substring(12,maxCharLength)}${suffix}`;
-  }
 
   return (
       <>
@@ -85,6 +138,7 @@ export default function SearchModal({query, handleQueryChange, searchResults, lo
               flexDirection: 'column',
               justifyContent: 'start',
               alignItems: 'center',
+              backgroundColor: '#F6F6F6',
             }}
             sx={style}
           >
@@ -99,7 +153,8 @@ export default function SearchModal({query, handleQueryChange, searchResults, lo
                   width: "100%",
                   borderBottom: "0.5px solid gray",
                   padding: "15px",
-                  fontSize: "18px"
+                  fontSize: "18px",
+                  backgroundColor: "white"
                 }}
                 onChange={(e) => handleQueryChange(e)}
                 value={query}
@@ -108,9 +163,10 @@ export default function SearchModal({query, handleQueryChange, searchResults, lo
             <List
                 component="nav"
                 style={{
-                  width: "95%",
+                  width: "100%",
                   height: "100%",
-                  overflow: "auto"
+                  overflowX: "hidden",
+                  overflowY: "scroll"
                 }}
             >
               {
@@ -141,6 +197,25 @@ export default function SearchModal({query, handleQueryChange, searchResults, lo
                     </>
               }
               {
+                !loading && searchResults && searchResults.length > 0 &&
+                <div
+                    style={{
+                      width: "100%",
+                      padding: "5px"
+                    }}
+                >
+                  <p
+                      style={{
+                        color: "#92D293",
+                        padding: 0,
+                        margin: 0
+                      }}
+                  >
+                    Results
+                  </p>
+                </div>
+              }
+              {
                 !loading &&
                 searchResults.map((searchResult, idx) =>{
                   return (
@@ -149,67 +224,79 @@ export default function SearchModal({query, handleQueryChange, searchResults, lo
                           style={{
                             width: "100%",
                             borderRadius: "10px",
-                            backgroundColor: selected === idx ? "#92D293" : ""
+                            backgroundColor: selected === idx ? "#92D293" : "white",
+                            marginTop: "5px",
+                            marginBottom: "5px",
                           }}
                           onMouseOver={() => setSelected(idx)}
                       >
                         {
-                          // !searchResult.highlights &&
                               <div
                                   style={{
                                     display: 'flex',
-                                    flexDirection: "column"
+                                    flexDirection: "column",
+                                    justifyContent: "space-around",
+                                    gap: "5px"
                                 }}
                               >
-                                <ListItemText>
-                                  {decode(searchResult.title)}
-                                </ListItemText>
-
                                 {
-                                  searchResult._id &&
-                                  <span
-                                    style={{
-                                      color: "gray",
-                                      fontSize: 12
-                                    }}
-                                  >
-                                    {truncateLink(searchResult._id)}
-                                  </span>
+                                  // TODO: can remove this eventually because highlights will probably always appear
+                                    // but for now this is testing purposes
+                                  !searchResult.highlights || (searchResult.highlights && searchResult.highlights.length === 0) &&
+                                    <span
+                                      style={{
+                                        color: "gray",
+                                        fontSize: 12
+                                      }}
+                                    >
+                                      No direct hits
+                                    </span>
                                 }
+                                {
+                                  searchResult.highlights &&
+                                      searchResult.highlights.length > 0 && // for multiple highlights we only grab one for now -- may add extra feature later
+                                      searchResult.highlights.slice(0,1).map((highlight) => {
+
+                                        if (!highlight.texts || (highlight.texts && highlight.texts.length === 0)) {
+                                          return (
+                                              <span
+                                                  style={{
+                                                    color: "gray",
+                                                    fontSize: 12
+                                                  }}
+                                              >
+                                              No direct match
+                                            </span>
+                                          )
+                                        }
+
+                                        return (
+                                              <HighlightedText
+                                                  inFocus={
+                                                    selected === idx
+                                                  }
+                                                  textDocs={highlight.texts}
+                                                  style={{
+                                                    color: selected === idx ? "white" : "black",
+                                                    margin: 0,
+                                                    fontSize: ".9em"
+                                                  }}
+                                              />
+                                        )
+
+                                      })
+                                }
+
+                                <span
+                                  style={{
+                                    color: selected === idx ? "white" : "gray",
+                                    fontSize: ".75em"
+                                  }}
+                                >
+                                  {truncateText(decode(searchResult.title))}
+                                </span>
                               </div>
                         }
-
-                        {/*{*/}
-                        {/*  searchResult.highlights &&*/}
-                        {/*  searchResult.highlights.map((highlight) => {*/}
-
-                        {/*    return (*/}
-                        {/*        <ListItemText>*/}
-                        {/*          <>*/}
-                        {/*            {*/}
-                        {/*              highlight.texts.map((text) => {*/}
-
-                        {/*                if (text.type === "hit") {*/}
-                        {/*                  return (*/}
-                        {/*                      <b>*/}
-                        {/*                        {text.value}*/}
-                        {/*                      </b>*/}
-                        {/*                  )*/}
-                        {/*                }*/}
-
-                        {/*                return (*/}
-                        {/*                    <>*/}
-                        {/*                      {text.value}*/}
-                        {/*                    </>*/}
-                        {/*                )*/}
-                        {/*              })*/}
-                        {/*            }*/}
-                        {/*          </>*/}
-                        {/*        </ListItemText>*/}
-
-                        {/*        )})*/}
-                        {/*}*/}
-
                       </ListItemButton>
                   )
                 })
