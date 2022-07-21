@@ -1,31 +1,31 @@
 [
-  {
-    "name": "testDeploy",
-    "private": true
-  },
-  {
-    "name": "writeSitemapToAtlas",
-    "private": true
-  },
-  {
-    "name": "writePageContents",
-    "private": true,
-    "run_as_system": true
-  },
-  {
-    "name": "deleteOldDocuments",
-    "private": true
-  },
-  {
-    "name": "searchPageContents",
-    "private": false,
-    "run_as_system": true,
-    "disable_arg_logs": true
-  },
-  {
-    "name": "triggerIndexGeneration",
-    "private": true,
-    "run_as_system": true,
-    "disable_arg_logs": true
-  }
+    {
+        "name": "writePageContents",
+        "private": true,
+        "run_as_system": true
+    },
+    {
+        "name": "writeSitemapToAtlas",
+        "private": true
+    },
+    {
+        "name": "deleteOldDocuments",
+        "private": true
+    },
+    {
+        "name": "searchPageContents",
+        "private": false,
+        "run_as_system": true,
+        "disable_arg_logs": true
+    },
+    {
+        "name": "testDeploy",
+        "private": true
+    },
+    {
+        "name": "triggerIndexGeneration",
+        "private": true,
+        "run_as_system": true,
+        "disable_arg_logs": true
+    }
 ]
