@@ -1,22 +1,26 @@
 exports = async function () {
-  const axios = require("axios");
-  
   const sitemapUrl = context.values.get("SITEMAP_URL");
-  console.log("Writing sitemap for:", sitemapUrl);
-  
   const fetchSitemapUrl = context.values.get("fetchSitemapUrl");
-  const { sites } = await axios.post(fetchSitemapUrl, {
-    sitemap_url: sitemapUrl
+  const axios = require("axios");
+
+  console.log("Writing sitemap for:", sitemapUrl);
+
+  const {
+    data: { sites },
+  } = await axios.post(fetchSitemapUrl, {
+    sitemap_url: sitemapUrl,
   });
 
-  const now = new Date()
-  const sitemap = sites.map(loc => {
+  const now = new Date();
+  const sitemap = sites.map((loc) => {
     return {
       loc,
-      last_updated: now
-    }
-  })
-  
+      last_updated: now,
+    };
+  });
+
+  console.log("sitemap", JSON.stringify(sitemap));
+
   const mdb = context.services.get("mongodb-atlas");
   const sitePages = mdb.db("site-search").collection("pages");
   const session = mdb.startSession();
@@ -31,6 +35,6 @@ exports = async function () {
       writeConcern: { w: "majority" },
     }
   );
-  
+
   return "successfully updated sitemap";
 };

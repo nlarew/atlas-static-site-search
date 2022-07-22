@@ -27,7 +27,7 @@
       "userAgent": "insomnia/2022.4.1"
     },
     "requestId": "Vec_jhvUoAMEMaQ=",
-    "routeKey": "POST /parse",
+    "routeKey": "POST /fetchSitemap",
     "stage": "$default",
     "time": "18/Jul/2022:18:37:23 +0000",
     "timeEpoch": 1658169443382
