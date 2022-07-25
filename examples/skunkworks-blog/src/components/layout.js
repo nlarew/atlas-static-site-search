@@ -3,6 +3,8 @@ import { Link } from "gatsby"
 
 import Search from "atlas-static-site-search-box";
 
+const DOCS_SEARCH_APP_ID = "<YOUR APP ID>"
+
 const Layout = ({ location, title, children }) => {
   const rootPath = `${__PATH_PREFIX__}/`
   const isRootPath = location.pathname === rootPath
@@ -26,7 +28,7 @@ const Layout = ({ location, title, children }) => {
     <div className="global-wrapper" data-is-root-path={isRootPath}>
       <header className="global-header">
         {header}
-        <Search id="docs-search-qezzb" />
+        <Search id={DOCS_SEARCH_APP_ID} />
       </header>
       <main>{children}</main>
       <footer>
